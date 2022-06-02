@@ -10,9 +10,13 @@ class App extends Component {
     this.state = {
       monsters: [],
     };
+
+    console.log('1 - constructor');
   }
 
   componentDidMount() {
+    console.log('3 - componentDidMount');
+
     fetch('https://jsonplaceholder.typicode.com/users')
       .then((response) => response.json())
       .then((users) => {
@@ -28,6 +32,8 @@ class App extends Component {
   }
 
   render() {
+    console.log('2 - render');
+
     return (
       <div className="App">
         {
