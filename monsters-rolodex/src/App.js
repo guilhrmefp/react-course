@@ -8,6 +8,7 @@ class App extends Component {
 
     this.state = {
       monsters: [],
+      monstersFiltered: [],
     };
 
     console.log('1 - constructor');
@@ -21,7 +22,10 @@ class App extends Component {
       .then((users) => {
         this.setState(
           () => {
-            return { monsters: users };
+            return {
+              monsters: users,
+              monstersFiltered: users,
+            };
           },
           () => {
             console.log(this.state);
@@ -40,11 +44,18 @@ class App extends Component {
           className="search"
           placeholder="search monsters"
           onChange={(event) => {
-            console.log(event);
+            const monsterName = event.target.value;
+
+            this.setState(() => {
+              return {
+                monstersFiltered: this.state.monsters
+                  .filter((monster) => monster.name.toLowerCase().includes(monsterName.toLowerCase())),
+              }
+            })
           }}
         />
         {
-          this.state.monsters.map((monster) => {
+          this.state.monstersFiltered.map((monster) => {
             return (
               <div key={monster.id}>
                 <h1>{monster.name}</h1>
@@ -58,5 +69,3 @@ class App extends Component {
 }
 
 export default App;
-
-// https://jsonplaceholder.typicode.com/users
