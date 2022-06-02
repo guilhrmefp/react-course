@@ -1,6 +1,5 @@
 import { Component } from 'react';
 
-import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
@@ -36,6 +35,14 @@ class App extends Component {
 
     return (
       <div className="App">
+        <input
+          type="text"
+          className="search"
+          placeholder="search monsters"
+          onChange={(event) => {
+            console.log(event);
+          }}
+        />
         {
           this.state.monsters.map((monster) => {
             return (
