@@ -1,29 +1,26 @@
-import { Component } from 'react';
 import Card from '../card/card.component';
 
 import './card-list.styles.css';
 
-class CardList extends Component {
+// 1. monsters is being destructed from the first param of the function, the "props" param
+// same as: const { monsters } = props;
 
-  render() {
-    const { monsters } = this.props;
+// 2. the function is implicity returning the JSX.
+// same as: () => { return (<html>) }
 
-    return (
-      <div className="card-list">
-        {
-          monsters.map((monster) => {
-            return (
-              <Card
-                monster={monster}
-                key={monster.id}
-              />
-            )
-          })
-        }
-      </div>
-    );
-  }
-
-}
+const CardList = ({ monsters }) => (
+  <div className="card-list">
+    {
+      monsters.map((monster) => {
+        return (
+          <Card
+            monster={monster}
+            key={monster.id}
+          />
+        )
+      })
+    }
+  </div>
+);
 
 export default CardList;
