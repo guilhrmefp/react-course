@@ -18,17 +18,27 @@ const SignUpForm = () => {
     setFormFields({ ...formFields, [name]: value });
   };
 
+  const resetFormFields = () => {
+    setFormFields(defaultFormFields);
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (password === repeatPassword) {
-      const userAuth = await createAuthUserWithEmailAndPassword(email, password);
-      const { user } = userAuth;
-      user.displayName = displayName;
-      console.log(userAuth)
-      createUserDocumentFromAuth(user);
-    } else {
-      console.log('passwords do not match');
+    if (password !== repeatPassword) {
+      alert('Passwords do not match.');
+      return;
+    }
+
+    try {
+      const { user } = await createAuthUserWithEmailAndPassword(email, password);
+      await createUserDocumentFromAuth(user, { displayName });
+      resetFormFields();
+    } catch (error) {
+      if (error.code === 'auth/email-already-in-use') {
+        alert('Cannot create user, e-mail already in use.');
+      }
+      console.log('user creation encountered an error', error);
     }
   };
 
