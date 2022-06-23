@@ -20,6 +20,16 @@ const SignUpForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (password === repeatPassword) {
+      const userAuth = await createAuthUserWithEmailAndPassword(email, password);
+      const { user } = userAuth;
+      user.displayName = displayName;
+      console.log(userAuth)
+      createUserDocumentFromAuth(user);
+    } else {
+      console.log('passwords do not match');
+    }
   };
 
   return (
