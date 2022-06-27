@@ -61,7 +61,7 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
 }
 
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
-  if (!email && !password) {
+  if (!email || !password) {
     return;
   }
 
