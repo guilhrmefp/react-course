@@ -2,7 +2,7 @@ import { useState, createContext } from 'react';
 
 export const CartContext = createContext({
   isCartOpen: false,
-  setIsCartOpen: () => false,
+  setIsCartOpen: () => {},
 });
 
 export const CartProvider = ({children}) => {
