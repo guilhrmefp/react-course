@@ -6,15 +6,10 @@ import './checkout.styles.scss';
 const Checkout = () => {
   const {
     cartItems,
-    incrementItemFromCart,
-    decrementItemFromCart,
+    addItemToCart,
     removeItemFromCart,
     cartTotal,
   } = useContext(CartContext);
-
-  const incrementProductFromCart = (productIndex) => () => incrementItemFromCart(productIndex);
-  const decrementProductFromCart = (productIndex) => () => decrementItemFromCart(productIndex);
-  const removeProductFromCart = (productIndex) => () => removeItemFromCart(productIndex);
 
   return (
     <div className="checkout-container">
@@ -40,17 +35,17 @@ const Checkout = () => {
                   </td>
                   <td>{ name }</td>
                   <td>
-                    <button onClick={decrementProductFromCart(index)}>
+                    <button onClick={() => removeItemFromCart(cartItem)}>
                       &lsaquo;
                     </button>
                     { quantity }
-                    <button onClick={incrementProductFromCart(index)}>
+                    <button onClick={() => addItemToCart(cartItem)}>
                       &rsaquo;
                     </button>
                   </td>
                   <td>${ price }</td>
                   <td>
-                    <button onClick={removeProductFromCart(index)}>
+                    <button>
                       &times;
                     </button>
                   </td>

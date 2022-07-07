@@ -23,39 +23,21 @@ const addCartItem = (cartItems, productToAdd) => {
   ];
 }
 
-const incrementCartItem = (cartItems, productIndexToIncrement) => {
-  const newCartItems = [...cartItems];
-  const newProduct = newCartItems[productIndexToIncrement];
-  const newProductQuantity = {
-    ...newProduct,
-    quantity: newProduct.quantity + 1,
-  };
+const removeCartItem = (cartItems, cartItemToRemove) => {
+  // find cart item to remove
+  const existingCartItem = cartItems.find((cartItem) => cartItem.id === cartItemToRemove.id);
 
-  newCartItems.splice(productIndexToIncrement, 1, newProductQuantity);
-  return newCartItems;
-}
-
-const decrementCartItem = (cartItems, productIndexToDecrement) => {
-  const newCartItems = [...cartItems];
-  const newProduct = newCartItems[productIndexToDecrement];
-  const newProductQuantity = {
-    ...newProduct,
-    quantity: newProduct.quantity <= 0 ? 0 : newProduct.quantity - 1,
-  };
-
-  if (newProductQuantity.quantity) {
-    newCartItems.splice(productIndexToDecrement, 1, newProductQuantity);
-  } else {
-    newCartItems.splice(productIndexToDecrement, 1);
+  // check if quantity if equal to 1, if it is, remove that item from the cart
+  if (existingCartItem.quantity === 1) {
+    return cartItems.filter((cartItem) => cartItem.id !== cartItemToRemove.id);
   }
 
-  return newCartItems;
-}
-
-const removeCartItem = (cartItems, productIndexToRemove) => {
-  const newCartItems = [...cartItems];
-  newCartItems.splice(productIndexToRemove, 1);
-  return newCartItems;
+  // return back cartItems with matching cart item with reduced quantity
+  return cartItems.map((cartItem) => (
+    cartItem.id === cartItemToRemove.id
+      ? { ...cartItem, quantity: cartItem.quantity - 1 }
+      : cartItem
+  ));
 }
 
 export const CartContext = createContext({
@@ -63,6 +45,7 @@ export const CartContext = createContext({
   setIsCartOpen: () => {},
   cartItems: [],
   addItemToCart: () => {},
+  removeItemFromCart: () => {},
   cartCount: 0,
   cartTotal: 0,
 });
@@ -85,16 +68,8 @@ export const CartProvider = ({children}) => {
     setCartItems(addCartItem(cartItems, productToAdd));
   }
 
-  const incrementItemFromCart = (productIndexToIncrement) => {
-    setCartItems(incrementCartItem(cartItems, productIndexToIncrement));
-  }
-
-  const decrementItemFromCart = (productIndexToDecrement) => {
-    setCartItems(decrementCartItem(cartItems, productIndexToDecrement));
-  }
-
-  const removeItemFromCart = (productIndexToRemove) => {
-    setCartItems(removeCartItem(cartItems, productIndexToRemove));
+  const removeItemFromCart = (cartItemToRemove) => {
+    setCartItems(removeCartItem(cartItems, cartItemToRemove));
   }
 
   const value = {
@@ -102,8 +77,6 @@ export const CartProvider = ({children}) => {
     setIsCartOpen,
     cartItems,
     addItemToCart,
-    incrementItemFromCart,
-    decrementItemFromCart,
     removeItemFromCart,
     cartCount,
     cartTotal,
