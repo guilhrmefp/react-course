@@ -40,10 +40,15 @@ const decrementCartItem = (cartItems, productIndexToDecrement) => {
   const newProduct = newCartItems[productIndexToDecrement];
   const newProductQuantity = {
     ...newProduct,
-    quantity: newProduct.quantity > 1 ? newProduct.quantity - 1 : 1,
+    quantity: newProduct.quantity <= 0 ? 0 : newProduct.quantity - 1,
   };
 
-  newCartItems.splice(productIndexToDecrement, 1, newProductQuantity);
+  if (newProductQuantity.quantity) {
+    newCartItems.splice(productIndexToDecrement, 1, newProductQuantity);
+  } else {
+    newCartItems.splice(productIndexToDecrement, 1);
+  }
+
   return newCartItems;
 }
 
