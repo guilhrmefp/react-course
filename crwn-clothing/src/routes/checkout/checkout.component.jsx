@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import CheckoutItem from '../../components/checkout-item/checkout-item.component';
 import { CartContext } from '../../contexts/cart-context';
 
 import './checkout.styles.scss';
@@ -13,50 +14,32 @@ const Checkout = () => {
 
   return (
     <div className="checkout-container">
+      <div className="checkout-header">
+        <div className="header-block">
+          <span>Product</span>
+        </div>
+        <div className="header-block">
+          <span>Description</span>
+        </div>
+        <div className="header-block">
+          <span>Quantity</span>
+        </div>
+        <div className="header-block">
+          <span>Price</span>
+        </div>
+        <div className="header-block">
+          <span>Remove</span>
+        </div>
+      </div>
       <table>
-        <thead>
-          <tr>
-            <th>Product</th>
-            <th>Description</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th></th>
-          </tr>
-        </thead>
         <tbody>
           {
-            cartItems.map((cartItem, index) => {
-              const { id, imageUrl, name, quantity, price } = cartItem;
-
-              return (
-                <tr key={id}>
-                  <td>
-                    <img src={imageUrl} alt={name} />
-                  </td>
-                  <td>{ name }</td>
-                  <td>
-                    <button onClick={() => removeItemFromCart(cartItem)}>
-                      &lsaquo;
-                    </button>
-                    { quantity }
-                    <button onClick={() => addItemToCart(cartItem)}>
-                      &rsaquo;
-                    </button>
-                  </td>
-                  <td>${ price }</td>
-                  <td>
-                    <button>
-                      &times;
-                    </button>
-                  </td>
-                </tr>
-              )
-            })
+            cartItems.map((cartItem) => <CheckoutItem cartItem={cartItem} key={cartItem.id} />)
           }
         </tbody>
       </table>
 
-      <h2>Total: ${ cartTotal }</h2>
+      <div className="total">Total: ${ cartTotal }</div>
     </div>
   );
 }
