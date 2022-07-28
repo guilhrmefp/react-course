@@ -1,4 +1,4 @@
-import { useState, createContext, useEffect, useReducer} from 'react';
+import { createContext, useReducer} from 'react';
 
 const addCartItem = (cartItems, productToAdd) => {
   // find if cartItems contains productToAdd
@@ -58,6 +58,7 @@ export const CartContext = createContext({
 
 const CART_ACTION_TYPES = {
   SET_CART_ITEMS: 'SET_CART_ITEMS',
+  SET_IS_CART_OPEN: 'SET_IS_CART_OPEN',
 }
 
 const cartReducer = (state, action) => {
@@ -65,6 +66,12 @@ const cartReducer = (state, action) => {
 
   switch(type) {
     case CART_ACTION_TYPES.SET_CART_ITEMS:
+      return {
+        ...state,
+        ...payload,
+      }
+
+    case CART_ACTION_TYPES.SET_IS_CART_OPEN:
       return {
         ...state,
         ...payload,
@@ -84,7 +91,16 @@ const INITIAL_STATE = {
 
 export const CartProvider = ({children}) => {
   const [ state, dispatch ] = useReducer(cartReducer, INITIAL_STATE);
-  const { cartItems, cartCount, cartTotal } = state;
+  const { isCartOpen, cartItems, cartCount, cartTotal } = state;
+
+  const setIsCartOpen = () => {
+    dispatch({
+      type: CART_ACTION_TYPES.SET_IS_CART_OPEN,
+      payload: {
+        isCartOpen: !state.isCartOpen,
+      }
+    });
+  }
 
   const updateCartItemsReducer = (newCartItems) => {
     const newCartCount = newCartItems.reduce((total, cartItem) => total + cartItem.quantity, 0);
@@ -116,8 +132,8 @@ export const CartProvider = ({children}) => {
   }
 
   const value = {
-    isCartOpen: true,
-    setIsCartOpen: () => {},
+    isCartOpen,
+    setIsCartOpen,
     cartItems,
     addItemToCart,
     removeItemFromCart,
