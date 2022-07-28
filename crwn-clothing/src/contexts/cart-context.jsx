@@ -1,4 +1,5 @@
 import { createContext, useReducer} from 'react';
+import { createAction } from '../utils/reducer.utils';
 
 const addCartItem = (cartItems, productToAdd) => {
   // find if cartItems contains productToAdd
@@ -59,7 +60,7 @@ export const CartContext = createContext({
 const CART_ACTION_TYPES = {
   SET_CART_ITEMS: 'SET_CART_ITEMS',
   SET_IS_CART_OPEN: 'SET_IS_CART_OPEN',
-}
+};
 
 const cartReducer = (state, action) => {
   const { type, payload } = action;
@@ -79,7 +80,7 @@ const cartReducer = (state, action) => {
 
     default:
       throw new Error(`Unhandled ype of ${type} in cartReducer`);
-  }
+  };
 };
 
 const INITIAL_STATE = {
@@ -94,24 +95,20 @@ export const CartProvider = ({children}) => {
   const { isCartOpen, cartItems, cartCount, cartTotal } = state;
 
   const setIsCartOpen = (bool) => {
-    dispatch({
-      type: CART_ACTION_TYPES.SET_IS_CART_OPEN,
-      payload: bool,
-    });
+    dispatch(createAction(CART_ACTION_TYPES.SET_IS_CART_OPEN, bool));
   }
 
   const updateCartItemsReducer = (newCartItems) => {
     const newCartCount = newCartItems.reduce((total, cartItem) => total + cartItem.quantity, 0);
     const newCartTotal = newCartItems.reduce((total,  cartItem) => total + cartItem.quantity * cartItem.price, 0);
 
-    dispatch({
-      type: CART_ACTION_TYPES.SET_CART_ITEMS,
-      payload: {
+    dispatch(
+      createAction(CART_ACTION_TYPES.SET_CART_ITEMS, {
         cartItems: newCartItems,
         cartCount: newCartCount,
         cartTotal: newCartTotal,
-      },
-    });
+      })
+    );
   }
 
   const addItemToCart = (productToAdd) => {
