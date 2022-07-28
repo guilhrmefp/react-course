@@ -69,13 +69,13 @@ const cartReducer = (state, action) => {
       return {
         ...state,
         ...payload,
-      }
+      };
 
     case CART_ACTION_TYPES.SET_IS_CART_OPEN:
       return {
         ...state,
-        ...payload,
-      }
+        isCartOpen: payload,
+      };
 
     default:
       throw new Error(`Unhandled ype of ${type} in cartReducer`);
@@ -93,18 +93,16 @@ export const CartProvider = ({children}) => {
   const [ state, dispatch ] = useReducer(cartReducer, INITIAL_STATE);
   const { isCartOpen, cartItems, cartCount, cartTotal } = state;
 
-  const setIsCartOpen = () => {
+  const setIsCartOpen = (bool) => {
     dispatch({
       type: CART_ACTION_TYPES.SET_IS_CART_OPEN,
-      payload: {
-        isCartOpen: !state.isCartOpen,
-      }
+      payload: bool,
     });
   }
 
   const updateCartItemsReducer = (newCartItems) => {
     const newCartCount = newCartItems.reduce((total, cartItem) => total + cartItem.quantity, 0);
-    const newCartTotal = newCartItems.reduce((total, cartItem) => total + cartItem.quantity * cartItem.price, 0);
+    const newCartTotal = newCartItems.reduce((total,  cartItem) => total + cartItem.quantity * cartItem.price, 0);
 
     dispatch({
       type: CART_ACTION_TYPES.SET_CART_ITEMS,
